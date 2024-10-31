@@ -3,14 +3,14 @@ resource "aws_security_group" "aws_eks_nlb_secgroup" {
   description = "Security Group for EKS NLB"
   vpc_id      = aws_vpc.main.id
 
-#   ingress {
-#     from_port   = 0
-#     to_port     = 0
-#     protocol    = "-1"
-#     #     cidr_blocks = ["41.155.68.45/32"]
-#     security_groups = [d]
-#     description = "Allow Access to Fortigate"
-#   }
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "icmp"
+    #     cidr_blocks = ["41.155.68.45/32"]
+    security_groups = [aws_security_group.forti_internal_secgroup.id]
+    description = "Allow ICMP Access to Fortigate"
+  }
 
   ingress {
     from_port   = 80

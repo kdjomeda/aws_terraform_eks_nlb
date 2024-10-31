@@ -1,12 +1,4 @@
-data "aws_caller_identity" "current" {}
-data "aws_region" "current" {}
-data "aws_iam_session_context" "current" {
-  # This data source provides information on the IAM source role of an STS assumed role
-  # For non-role ARNs, this data source simply passes the ARN through issuer ARN
-  # Ref https://github.com/terraform-aws-modules/terraform-aws-eks/issues/2327#issuecomment-1355581682
-  # Ref https://github.com/hashicorp/terraform-provider-aws/issues/28381
-  arn = data.aws_caller_identity.current.arn
-}
+
 
 //////////////////////////////////////// Question: Where is this admin role from. Usually it's needs to be created
 # data "aws_iam_role" "eks_admin_role_name" {
@@ -113,11 +105,11 @@ module "eks" {
   eks_managed_node_groups = {
 
     "${local.common_name}-mdw" = {
-      instance_types = ["t3.small"]
+      instance_types = var.var_mdw_node_group_instances_type
 
-      min_size     = 2
-      max_size     = 10
-      desired_size = 2
+      min_size     = var.var_mdw_node_group_instances_min
+      max_size     = var.var_mdw_node_group_instances_max
+      desired_size = var.var_mdw_node_group_instances_desired
     }
 
   }

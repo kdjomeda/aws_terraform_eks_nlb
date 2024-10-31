@@ -1,27 +1,27 @@
-resource "aws_db_subnet_group" "db_subnet_group" {
-  name       = "${local.common_name}-postgres-mdw-subgroup"
-  subnet_ids = [aws_subnet.private_zone1.id, aws_subnet.private_zone2.id]
-}
-
-resource "aws_security_group" "postgres_secgroup" {
-  name   = "${local.common_name}-postgres-sg"
-  vpc_id = aws_vpc.main.id
-
-  # Allow inbound traffic from EKS pods
-  ingress {
-    from_port   = var.var_rds_aurora_db_port
-    to_port     = var.var_rds_aurora_db_port
-    protocol    = "tcp"
-    #     security_groups = [aws_security_group.e.id] # Security group for the EKS pods
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
+# resource "aws_db_subnet_group" "db_subnet_group" {
+#   name       = "${local.common_name}-postgres-mdw-subgroup"
+#   subnet_ids = [aws_subnet.private_zone1.id, aws_subnet.private_zone2.id]
+# }
+#
+# resource "aws_security_group" "postgres_secgroup" {
+#   name   = "${local.common_name}-postgres-sg"
+#   vpc_id = aws_vpc.main.id
+#
+#   # Allow inbound traffic from EKS pods
+#   ingress {
+#     from_port   = var.var_rds_aurora_db_port
+#     to_port     = var.var_rds_aurora_db_port
+#     protocol    = "tcp"
+#     #     security_groups = [aws_security_group.e.id] # Security group for the EKS pods
+#   }
+#
+#   egress {
+#     from_port   = 0
+#     to_port     = 0
+#     protocol    = "-1"
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
+# }
 #
 # module "rds_aurora" {
 #   source  = "terraform-aws-modules/rds-aurora/aws"
@@ -55,11 +55,11 @@ resource "aws_security_group" "postgres_secgroup" {
 #       apply_method = "immediate"
 #     }
 #   ]
-#   db_cluster_parameter_group_name = var.var_aurora_cluster_postgres_15_8_paramgroup_name
+#   db_cluster_parameter_group_name = var.var_rds_aurora_cluster_postgres_15_8_paramgroup_name
 #   engine_lifecycle_support = "open-source-rds-extended-support-disabled"
 #
 #   create_db_cluster_parameter_group      = var.var_rds_aurora_create_db_cluster_param_group
-#   db_cluster_parameter_group_family      = var.var_aurora_cluster_postgres_15_8_paramgroup_family //"aurora-postgresql14"
+#   db_cluster_parameter_group_family      = var.var_rds_aurora_cluster_postgres_15_8_paramgroup_family //"aurora-postgresql14"
 #   db_cluster_parameter_group_description = "${local.common_name} example cluster parameter group"
 #   db_cluster_parameter_group_parameters = [
 #     {
