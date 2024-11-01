@@ -82,3 +82,20 @@ labels = {
     ignore_changes = [scaling_config[0].desired_size]
   }
 }
+
+
+resource "aws_autoscaling_group_tag" "nodes_group" {
+  for_each = toset(
+    [for asg in flatten(
+      [for resources in aws_eks_node_group.core_node_group.resources : resources.autoscaling_groups]
+    ) : asg.name]
+  )
+
+  autoscaling_group_name = each.value
+
+  tag {
+    key   = "Name"
+    value = "${local.common_name}-${local.artha_product}"
+    propagate_at_launch = true
+  }
+}

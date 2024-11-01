@@ -28,6 +28,7 @@ resource "aws_subnet" "public_zone1" {
   vpc_id = aws_vpc.main.id
 #   cidr_block = "10.0.64.0/19"
   cidr_block = var.var_public_zone1_cidr
+  availability_zone = local.zone1
   map_public_ip_on_launch = true
   tags = {
     "Name" = "${local.common_name}-public-${local.zone1}"
@@ -40,6 +41,7 @@ resource "aws_subnet" "public_zone2" {
   vpc_id = aws_vpc.main.id
 #   cidr_block = "10.0.96.0/19"
   cidr_block = var.var_public_zone2_cidr
+  availability_zone = local.zone2
   map_public_ip_on_launch = true
   tags = {
     "Name" = "${local.common_name}-public-${local.zone2}"
