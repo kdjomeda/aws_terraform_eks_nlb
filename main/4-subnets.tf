@@ -8,6 +8,7 @@ resource "aws_subnet" "private_zone1" {
     "Name" = "${local.common_name}-private-${local.zone1}"
     "kubernetes.io/role/internal-elb" = "1"
     "kubernetes.io/cluster/${local.common_name}-${local.eks_name}" ="owned"
+    "kubernetes.io/cluster/${local.common_name}-${local.artha_eks_name}" ="owned"
   }
 }
 
@@ -21,6 +22,7 @@ resource "aws_subnet" "private_zone2" {
     "Name" = "${local.common_name}-private-${local.zone2}"
     "kubernetes.io/role/internal-elb" = "1"
     "kubernetes.io/cluster/${local.common_name}-${local.eks_name}" ="owned"
+    "kubernetes.io/cluster/${local.common_name}-${local.artha_eks_name}" ="owned"
   }
 }
 
@@ -34,6 +36,7 @@ resource "aws_subnet" "public_zone1" {
     "Name" = "${local.common_name}-public-${local.zone1}"
     "kubernetes.io/role/elb" = "1"
     "kubernetes.io/cluster/${local.common_name}-${local.eks_name}" ="owned"
+    "kubernetes.io/cluster/${local.common_name}-${local.artha_eks_name}" ="owned"
   }
 }
 
@@ -47,5 +50,6 @@ resource "aws_subnet" "public_zone2" {
     "Name" = "${local.common_name}-public-${local.zone2}"
     "kubernetes.io/role/elb" = "1"
     "kubernetes.io/cluster/${local.common_name}-${local.eks_name}" ="owned"
+    "kubernetes.io/cluster/${local.common_name}-${local.artha_eks_name}" ="owned"
   }
 }

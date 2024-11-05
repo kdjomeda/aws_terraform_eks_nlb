@@ -86,7 +86,7 @@ resource "aws_iam_instance_profile" "ec2_instance_profile" {
 
 resource "aws_security_group" "bastion_host_secgroup" {
   name        = "${local.common_name}-ec2-bastion-secgroup"
-  description = "Security Group for EKS NLB"
+  description = "Security Group Allow all from forti"
   vpc_id      = aws_vpc.main.id
 
   ingress {

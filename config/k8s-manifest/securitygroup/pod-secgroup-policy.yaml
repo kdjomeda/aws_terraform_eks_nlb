@@ -1,0 +1,12 @@
+apiVersion: vpcresources.k8s.aws/v1beta1
+kind: SecurityGroupPolicy
+metadata:
+  name: access-to-aws-resources
+  namespace: arthatest
+spec:
+  podSelector:
+    matchLabels:
+      app: busybox
+  securityGroups:
+    groupIds:
+      - sg-0feaa364ba5b3c34e

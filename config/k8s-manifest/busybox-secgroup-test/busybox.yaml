@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: busybox-test
+  labels:
+    app: busybox
+  namespace: arthatest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: busybox
+  template:
+    metadata:
+      labels:
+        app: busybox
+    spec:
+      containers:
+        - name: bubybox-test
+          image: nicolaka/netshoot
+          command: [ "/bin/bash" ]
+          args: [ "-c", "while true; do ping localhost; sleep 60;done" ]
+          ports:
+            - containerPort: 8000
+              name: http
+          resources:
+            requests:
+              memory: 128Mi
+              cpu: 100m
+            limits:
+              memory: 128Mi
+              cpu: 100m
+
+

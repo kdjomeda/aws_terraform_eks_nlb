@@ -1,0 +1,47 @@
+controller:
+  replicaCount: 2
+  minAvailable: 1
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  autoscaling:
+    enabled: true
+    annotations: {}
+    minReplicas: 2
+    maxReplicas: 6
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+    behavior:
+      scaleDown:
+        stabilizationWindowSeconds: 60
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  service:
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+      service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+      service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
+#      service.beta.kubernetes.io/aws-load-balancer-name: “gmfs-ire-prod-nlb-mdw”
+      service.beta.kubernetes.io/aws-load-balancer-private-ipv4-addresses: 10.0.0.20, 10.0.32.20
+      service.beta.kubernetes.io/aws-load-balancer-scheme: "internal"
+      service.beta.kubernetes.io/aws-load-balancer-subnets: subnet-09c267f7f14285ab2,subnet-0d0a1a070e6c50a50
+      service.beta.kubernetes.io/aws-load-balancer-type: nlb
+      service.beta.kubernetes.io/aws-load-balancer-ssl-ports: https
+      service.beta.kubernetes.io/aws-load-balancer-ssl-negotiation-policy: 'ELBSecurityPolicy-TLS13-1-2-2021-06'
+      service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
+      service.beta.kubernetes.io/aws-load-balancer-manage-backend-security-group-rules: "true"
+#      service.beta.kubernetes.io/aws-load-balancer-security-groups: ""
+    targetPorts:
+      http: http
+      https: http
+  ingress:
+    enabled: true
+    annotations:
+      alb.ingress.kubernetes.io/security-groups: sg-0e6871a7164386ed9
+      alb.ingress.kubernetes.io/load-balancer-name: gmfs-ire-prod-nlb-mdw

@@ -134,87 +134,87 @@ resource "helm_release" "alb-controller" {
   }
 }
 
-resource "kubernetes_deployment" "echoserver-deployment" {
-
-
-  metadata  {
-    name      = "echoserver"
-    namespace = "default"
-  }
-
-  spec  {
-    selector  {
-      match_labels = {
-        app=  "gmfs-ire-prod-nlb-mdw"
-      }
-    }
-    replicas = 1
-    template  {
-      metadata  {
-        labels = {
-          app=  "gmfs-ire-prod-nlb-mdw"
-        }
-      }
-      spec {
-        container {
-          name = "echoserver"
-          image = "k8s.gcr.io/e2e-test-images/echoserver:2.5"
-#           image = "traefik:v3.1"
-          port {
-            container_port = 8080
-          }
-          args = ["--api.insecure"]
-        }
-      }
-
-    }
-  }
-}
-
-
-resource "kubernetes_service" "gmfs-load-balancer" {
-  metadata {
-    name      = "${local.common_name}-nlb-mdw"
-    namespace = "default"
-    annotations = {
-      # AWS Load Balancer Annotations
-      "service.beta.kubernetes.io/aws-load-balancer-backend-protocol"                     = "tcp"
-      "service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled"    = "true"
-      "service.beta.kubernetes.io/aws-load-balancer-type"                                 = "nlb"
-      "service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout"              = "60"
-      "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type"                      = "ip"
-      "service.beta.kubernetes.io/aws-load-balancer-type"                                 = "external"
-      "service.beta.kubernetes.io/aws-load-balancer-scheme"                               = "internal"
-      "service.beta.kubernetes.io/aws-load-balancer-subnets"                              = "${aws_subnet.private_zone1.id},${aws_subnet.private_zone2.id}"
-      "service.beta.kubernetes.io/aws-load-balancer-private-ipv4-addresses"               = "10.0.0.20, 10.0.32.20"
-      "service.beta.kubernetes.io/aws-load-balancer-manage-backend-security-group-rules"  = "true"
-      "service.beta.kubernetes.io/aws-load-balancer-security-groups"                      = aws_security_group.aws_eks_nlb_secgroup.id
-      "service.beta.kubernetes.io/aws-load-balancer-name"                                 = "${local.common_name}-nlb-mdw"
-#       "service.beta.kubernetes.io/aws-load-balancer-proxy-protocol"                       = "*"
-#       "service.beta.kubernetes.io/aws-load-balancer-ssl-ports"                            = "443"
-#       "service.beta.kubernetes.io/aws-load-balancer-ssl-negotiation-policy"               = "ELBSecurityPolicy-TLS13-1-2-2021-06"
-    }
-  }
-
-  spec {
-    selector = {
-      "app" = "${local.common_name}-nlb-mdw"
-    }
-
-    port {
-      name = "http-port"
-      port        = 80
-      target_port = 8080
-      protocol    = "TCP"
-    }
-
+# resource "kubernetes_deployment" "echoserver-deployment" {
+#
+#
+#   metadata  {
+#     name      = "echoserver"
+#     namespace = "default"
+#   }
+#
+#   spec  {
+#     selector  {
+#       match_labels = {
+#         app=  "gmfs-ire-prod-nlb-mdw"
+#       }
+#     }
+#     replicas = 1
+#     template  {
+#       metadata  {
+#         labels = {
+#           app=  "gmfs-ire-prod-nlb-mdw"
+#         }
+#       }
+#       spec {
+#         container {
+#           name = "echoserver"
+#           image = "k8s.gcr.io/e2e-test-images/echoserver:2.5"
+# #           image = "traefik:v3.1"
+#           port {
+#             container_port = 8080
+#           }
+#           args = ["--api.insecure"]
+#         }
+#       }
+#
+#     }
+#   }
+# }
+#
+#
+# resource "kubernetes_service" "gmfs-load-balancer" {
+#   metadata {
+#     name      = "${local.common_name}-nlb-mdw"
+#     namespace = "default"
+#     annotations = {
+#       # AWS Load Balancer Annotations
+#       "service.beta.kubernetes.io/aws-load-balancer-backend-protocol"                     = "tcp"
+#       "service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled"    = "true"
+#       "service.beta.kubernetes.io/aws-load-balancer-type"                                 = "nlb"
+#       "service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout"              = "60"
+#       "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type"                      = "ip"
+#       "service.beta.kubernetes.io/aws-load-balancer-type"                                 = "external"
+#       "service.beta.kubernetes.io/aws-load-balancer-scheme"                               = "internal"
+#       "service.beta.kubernetes.io/aws-load-balancer-subnets"                              = "${aws_subnet.private_zone1.id},${aws_subnet.private_zone2.id}"
+#       "service.beta.kubernetes.io/aws-load-balancer-private-ipv4-addresses"               = "10.0.0.20, 10.0.32.20"
+#       "service.beta.kubernetes.io/aws-load-balancer-manage-backend-security-group-rules"  = "true"
+#       "service.beta.kubernetes.io/aws-load-balancer-security-groups"                      = aws_security_group.aws_eks_nlb_secgroup.id
+#       "service.beta.kubernetes.io/aws-load-balancer-name"                                 = "${local.common_name}-nlb-mdw"
+# #       "service.beta.kubernetes.io/aws-load-balancer-proxy-protocol"                       = "*"
+# #       "service.beta.kubernetes.io/aws-load-balancer-ssl-ports"                            = "443"
+# #       "service.beta.kubernetes.io/aws-load-balancer-ssl-negotiation-policy"               = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+#     }
+#   }
+#
+#   spec {
+#     selector = {
+#       "app" = "${local.common_name}-nlb-mdw"
+#     }
+#
 #     port {
-#       name = "https-port"
-#       port        = 443
+#       name = "http-port"
+#       port        = 80
 #       target_port = 8080
 #       protocol    = "TCP"
 #     }
-
-    type = "LoadBalancer"
-  }
-}
+#
+# #     port {
+# #       name = "https-port"
+# #       port        = 443
+# #       target_port = 8080
+# #       protocol    = "TCP"
+# #     }
+#
+#     type = "LoadBalancer"
+#   }
+# }

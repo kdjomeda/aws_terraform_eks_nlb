@@ -1,3 +1,10 @@
+data "terraform_remote_state" "shared_resources" {
+  backend = "local"
+  config = {
+    path = "${path.module}/../main/terraform.tfstate"
+  }
+}
+
 locals {
   env = "prod"
   region_name = "ire"
@@ -5,25 +12,23 @@ locals {
   zone1 = "eu-west-1a"
   zone2 = "eu-west-1b"
   eks_name = "mdw-eks-act01"
-  artha_eks_name = "core-eks-act01"
+  artha_eks_name = "art-eks-act01"
   eks_version = "1.30"
   common_name = "gmfs-ire-prod"
   mdw_product = "mdw"
-  artha_product = "core"
+  artha_product = "art"
 
-  ## From Eke
-  name            = "hub-gmfs-prod-cluster"
-#   region          = data.aws_region.current.id
+
   cluster_version = var.kubernetes_version
 
-  vpc_id = aws_vpc.main.id
-  private_subnets = [aws_subnet.private_zone1.id,aws_subnet.private_zone2.id]
+  vpc_id = data.terraform_remote_state.shared_resources.outputs.output_vpc_id
+  private_subnets = data.terraform_remote_state.shared_resources.outputs.output_vpc_private_subnets_ids
 
   authentication_mode = var.authentication_mode
 
   tags = {
-    Blueprint  = local.eks_name
-    Name       = "${local.common_name}-mdw-worker-node"
+    Blueprint  = local.artha_eks_name
+    Name       = "${local.common_name}-${local.artha_product}-worker-node"
     GithubRepo = "github.com/aws-samples/eks-blueprints-for-terraform-workshop"
   }
 
@@ -38,3 +43,4 @@ data "aws_iam_session_context" "current" {
   # Ref https://github.com/hashicorp/terraform-provider-aws/issues/28381
   arn = data.aws_caller_identity.current.arn
 }
+

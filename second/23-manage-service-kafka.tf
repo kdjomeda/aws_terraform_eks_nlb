@@ -1,7 +1,7 @@
 # resource "aws_security_group" "core_kafka_secgroup" {
 #   name        = "${local.common_name}-${local.artha_product}-kafka-secgroup"
 #   description = "Security Group for Managed Service for Kafka"
-#   vpc_id      = aws_vpc.main.id
+#   vpc_id      = local.vpc_id
 #
 # #   ingress {
 # #     from_port   = 0
@@ -16,7 +16,7 @@
 #     from_port   = var.var_mskcluster_secgroup_from_port
 #     to_port     = var.var_mskcluster_secgroup_to_port
 #     protocol    = "tcp"
-#     security_groups = [aws_security_group.bastion_host_secgroup.id]
+#     security_groups = [data.terraform_remote_state.shared_resources.outputs.output_secgroup_bastion_host_id]
 #     description = "Allow from bastion host"
 #   }
 #
@@ -24,7 +24,7 @@
 #     from_port   = var.var_mskcluster_secgroup_from_port
 #     to_port     = var.var_mskcluster_secgroup_to_port
 #     protocol    = "tcp"
-#     security_groups = [aws_security_group.eks_core_nodes_secgroup.id]
+#     security_groups = [aws_security_group.core_aws_eks_pod_secgroup.id]
 #     description = "Allow all from core eks node group"
 #   }
 #
@@ -75,7 +75,7 @@
 #   }
 #   broker_node_group_info {
 #     instance_type = var.var_mskcluster_msk_instance_type
-#     client_subnets = [aws_subnet.private_zone1.id,aws_subnet.private_zone2.id]
+#     client_subnets = data.terraform_remote_state.shared_resources.outputs.output_vpc_private_subnets_ids
 #
 #     storage_info {
 #       ebs_storage_info {

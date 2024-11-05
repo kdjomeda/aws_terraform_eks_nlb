@@ -1,0 +1,14 @@
+cat << EoF > securitygroup/pod-secgroup-policy.yaml
+apiVersion: vpcresources.k8s.aws/v1beta1
+kind: SecurityGroupPolicy
+metadata:
+  name: access-to-aws-resources
+  namespace: arthatest
+spec:
+  podSelector:
+    matchLabels:
+      app: busybox
+  securityGroups:
+    groupIds:
+      - ${POD_SG_ID}
+EoF

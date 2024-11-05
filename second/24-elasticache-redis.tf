@@ -1,7 +1,7 @@
 # resource "aws_security_group" "core_redis_secgroup" {
 #   name        = "${local.common_name}-${local.artha_product}-redis-secgroup"
 #   description = "Security Group elasticache Redis"
-#   vpc_id      = aws_vpc.main.id
+#   vpc_id      = local.vpc_id
 #
 # #   ingress {
 # #     from_port   = 0
@@ -15,7 +15,7 @@
 #     from_port   = var.var_redis_port
 #     to_port     = var.var_redis_port
 #     protocol    = "tcp"
-#     security_groups = [aws_security_group.bastion_host_secgroup.id]
+#     security_groups = [data.terraform_remote_state.shared_resources.outputs.output_secgroup_bastion_host_id]
 #     description = "Allow all from bastion host"
 #   }
 #
@@ -23,7 +23,7 @@
 #     from_port   = var.var_redis_port
 #     to_port     = var.var_redis_port
 #     protocol    = "tcp"
-#     security_groups = [aws_security_group.eks_core_nodes_secgroup.id]
+#     security_groups = [aws_security_group.core_aws_eks_pod_secgroup.id]
 #     description = "Allow all from core esk node group"
 #   }
 #
@@ -65,7 +65,7 @@
 #
 # resource "aws_elasticache_subnet_group" "redis_subnet_group" {
 #   name       = "${local.common_name}-${local.artha_product}-${var.var_redis_subnetgroupname}"
-#   subnet_ids = [aws_subnet.private_zone1.id,aws_subnet.private_zone2.id]
+#   subnet_ids = data.terraform_remote_state.shared_resources.outputs.output_vpc_private_subnets_ids
 #
 #   tags = {
 #     Terraform = true
