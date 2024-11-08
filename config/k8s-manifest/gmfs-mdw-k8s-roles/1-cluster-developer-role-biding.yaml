@@ -1,0 +1,13 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: mdw-developer-binding
+roleRef:
+  kind: ClusterRole
+  name: mdw-developer
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: Group
+    name: mdw-developer
+    apiGroup: rbac.authorization.k8s.io

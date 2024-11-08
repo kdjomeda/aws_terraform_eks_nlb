@@ -2,20 +2,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: placeholderapp
-  namespace: arthatest
+  name: portalapp
+  namespace: merchantportaltest
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: artha
+      app: merchantportal
   template:
     metadata:
       labels:
-        app: artha
+        app: merchantportal
     spec:
       containers:
-        - name: placeholderapp
+        - name: portalapp
           image: aputra/myapp-195:v2
           ports:
             - containerPort: 8080

@@ -43,9 +43,9 @@ resource "aws_iam_role_policy_attachment" "core_eks_developer" {
   role = aws_iam_role.core_eks_developer.name
   policy_arn = aws_iam_policy.core_eks_developer.arn
 }
-#
-# resource "aws_eks_access_entry" "core_eks_developer" {
-#   cluster_name      = aws_eks_cluster.core_eks.name
-#   principal_arn     = aws_iam_role.core_eks_developer.arn
-#   kubernetes_groups = ["core-developer"]
-# }
+
+resource "aws_eks_access_entry" "core_eks_developer" {
+  cluster_name      = module.core_eks.cluster_name
+  principal_arn     = aws_iam_role.core_eks_developer.arn
+  kubernetes_groups = ["art-developer"]
+}

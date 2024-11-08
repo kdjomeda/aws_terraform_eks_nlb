@@ -1,4 +1,4 @@
-cat << EoF > securitygroup/pod-secgroup-policy.yaml
+cat << EoF > art_securitygroup/pod-secgroup-policy.yaml
 apiVersion: vpcresources.k8s.aws/v1beta1
 kind: SecurityGroupPolicy
 metadata:
@@ -7,7 +7,25 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: busybox
+      app: netshoot
+  securityGroups:
+    groupIds:
+      - ${POD_SG_ID}
+EoF
+
+
+
+
+cat << EoF > mdw_securitygroup/pod-secgroup-policy.yaml
+apiVersion: vpcresources.k8s.aws/v1beta1
+kind: SecurityGroupPolicy
+metadata:
+  name: access-to-aws-resources
+  namespace: mdwtest
+spec:
+  podSelector:
+    matchLabels:
+      app: netshoot
   securityGroups:
     groupIds:
       - ${POD_SG_ID}

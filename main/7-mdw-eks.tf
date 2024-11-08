@@ -1,10 +1,19 @@
 
+resource "aws_security_group" "mdw_aws_eks_pod_secgroup" {
+  name        = "${local.common_name}-${local.eks_name}-pod-secgroup"
+  description = "Security Group for Middleware PODs"
+  vpc_id      = local.vpc_id
 
-//////////////////////////////////////// Question: Where is this admin role from. Usually it's needs to be created
-# data "aws_iam_role" "eks_admin_role_name" {
-#   name = var.eks_admin_role_name
-# }
-
+  egress {
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "${local.common_name}-${local.eks_name}-pod-secgroup"
+  }
+}
 
 resource "aws_iam_role" "eks_admin_role_name" {
   name = "${local.common_name}-admin-role"
@@ -114,6 +123,25 @@ module "eks" {
 
   }
 
+  node_security_group_additional_rules = {
+    ingress_route53_tcp = {
+      description                = "POD Nodes Access TCP route53"
+      protocol                   = "tcp"
+      from_port                  = 53
+      to_port                    = 53
+      type                       = "ingress"
+      source_security_group_id   = aws_security_group.mdw_aws_eks_pod_secgroup.id
+    }
+    ingress_route53_udp = {
+      description                = "POD Nodes Access UDP route53"
+      protocol                   = "udp"
+      from_port                  = 53
+      to_port                    = 53
+      type                       = "ingress"
+      source_security_group_id   = aws_security_group.mdw_aws_eks_pod_secgroup.id
+    }
+  }
+
   cluster_addons = {
     eks-pod-identity-agent = {
       most_recent = true
@@ -129,6 +157,7 @@ module "eks" {
           # Reference docs https://docs.aws.amazon.com/eks/latest/userguide/cni-increase-ip-addresses.html
           ENABLE_PREFIX_DELEGATION = "true"
           WARM_PREFIX_TARGET       = "1"
+          ENABLE_POD_ENI       = "true"
         }
       })
     }

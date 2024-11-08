@@ -1,0 +1,27 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: portalapp
+  namespace: merchantportaltest
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+    alb.ingress.kubernetes.io/security-groups: sg-087299f1469aaa235
+    alb.ingress.kubernetes.io/manage-backend-security-group-rules: "true"
+    alb.ingress.kubernetes.io/load-balancer-name: gmfs-ire-prod-alb-merchantportal
+
+spec:
+  ingressClassName: alb
+  rules:
+    - host: portal.gmfs.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: portalapp
+                port:
+                  number: 8080

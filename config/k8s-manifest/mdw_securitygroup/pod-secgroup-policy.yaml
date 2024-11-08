@@ -1,0 +1,12 @@
+apiVersion: vpcresources.k8s.aws/v1beta1
+kind: SecurityGroupPolicy
+metadata:
+  name: access-to-aws-resources
+  namespace: mdwtest
+spec:
+  podSelector:
+    matchLabels:
+      app: netshoot
+  securityGroups:
+    groupIds:
+      - sg-0321a330a181232e8

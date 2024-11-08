@@ -88,7 +88,7 @@ var_ec2instance_name = "bastion-host"
 var_ec2instance_root_ebs_volume_size = "30"
 var_ec2instance_root_ebs_volume_type = "gp3"
 
-var_mdw_node_group_instances_type = ["t3.small"]
+var_mdw_node_group_instances_type = ["m5.large"]
 var_mdw_node_group_instances_min = 1
 var_mdw_node_group_instances_max = 10
 var_mdw_node_group_instances_desired = 1

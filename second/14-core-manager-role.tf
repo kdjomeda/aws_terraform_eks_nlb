@@ -53,8 +53,8 @@ resource "aws_iam_role_policy_attachment" "core_eks_manager" {
   policy_arn = aws_iam_policy.core_eks_manager.arn
 }
 
-# resource "aws_eks_access_entry" "core_eks_manager" {
-#   cluster_name      = aws_eks_cluster.core_eks.name
-#   principal_arn     = aws_iam_role.core_eks_manager.arn
-#   kubernetes_groups = ["core-manager"]
-# }
+resource "aws_eks_access_entry" "core_eks_manager" {
+  cluster_name      = module.core_eks.cluster_name
+  principal_arn     = aws_iam_role.core_eks_manager.arn
+  kubernetes_groups = ["art-manager"]
+}

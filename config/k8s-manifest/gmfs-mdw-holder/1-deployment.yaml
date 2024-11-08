@@ -2,24 +2,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: placeholderapp
-  namespace: arthatest
+  name: mdwapp
+  namespace: mdwtest
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: artha
+      app: middleware
   template:
     metadata:
       labels:
-        app: artha
+        app: middleware
     spec:
       containers:
-        - name: placeholderapp
+        - name: mdwapp
           image: aputra/myapp-195:v2
           ports:
-            - containerPort: 8080
-              name: http
+            - name: http
+              containerPort: 8080
           resources:
             requests:
               memory: 128Mi

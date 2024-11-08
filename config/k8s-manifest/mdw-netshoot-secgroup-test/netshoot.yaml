@@ -2,23 +2,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: placeholderapp
-  namespace: arthatest
+  name: netshoot-test
+  labels:
+    app: netshoot
+  namespace: mdwtest
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: artha
+      app: netshoot
   template:
     metadata:
       labels:
-        app: artha
+        app: netshoot
     spec:
       containers:
-        - name: placeholderapp
-          image: aputra/myapp-195:v2
+        - name: netshoot-test
+          image: nicolaka/netshoot
+          command: [ "/bin/bash" ]
+          args: [ "-c", "while true; do ping localhost; sleep 60;done" ]
           ports:
-            - containerPort: 8080
+            - containerPort: 8000
               name: http
           resources:
             requests:
@@ -27,3 +31,5 @@ spec:
             limits:
               memory: 128Mi
               cpu: 100m
+
+
