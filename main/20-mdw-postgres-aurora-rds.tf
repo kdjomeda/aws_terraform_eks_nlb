@@ -57,7 +57,6 @@ module "rds_aurora" {
   ]
   db_cluster_parameter_group_name = var.var_rds_aurora_cluster_postgres_15_8_paramgroup_name
   engine_lifecycle_support = "open-source-rds-extended-support-disabled"
-
   create_db_cluster_parameter_group      = var.var_rds_aurora_create_db_cluster_param_group
   db_cluster_parameter_group_family      = var.var_rds_aurora_cluster_postgres_15_8_paramgroup_family //"aurora-postgresql14"
   db_cluster_parameter_group_description = "${local.common_name} example cluster parameter group"
@@ -73,6 +72,7 @@ module "rds_aurora" {
 
   create_security_group = var.var_rds_aurora_create_security_group
   iam_database_authentication_enabled = var.var_rds_aurora_iam_authentication_enable
+  manage_master_user_password = false
   master_password = var.var_rds_aurora_master_password
   master_username = var.var_rds_aurora_master_username
   database_name   = var.var_rds_aurora_database_name

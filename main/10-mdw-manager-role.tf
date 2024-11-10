@@ -1,7 +1,7 @@
 # data "aws_caller_identity" "current" {}
 
-resource "aws_iam_role" "mdw_eks_admin" {
-  name = "${local.env}-${local.mdw_product}-eks-admin"
+resource "aws_iam_role" "mdw_eks_manager" {
+  name = "${local.env}-${local.mdw_product}-eks-manager"
 
   assume_role_policy = <<POLICY
 {
@@ -19,8 +19,8 @@ resource "aws_iam_role" "mdw_eks_admin" {
 POLICY
 }
 
-resource "aws_iam_policy" "mdw_eks_admin" {
-  name = "${local.common_name}-${local.mdw_product}-AmazonEKSAdminPolicy"
+resource "aws_iam_policy" "mdw_eks_manager" {
+  name = "${local.common_name}-${local.mdw_product}-AmazonEKSManagerPolicy"
 
   policy = <<POLICY
 {
@@ -48,9 +48,9 @@ resource "aws_iam_policy" "mdw_eks_admin" {
 POLICY
 }
 
-resource "aws_iam_role_policy_attachment" "mdw_eks_admin" {
-  role       = aws_iam_role.mdw_eks_admin.name
-  policy_arn = aws_iam_policy.mdw_eks_admin.arn
+resource "aws_iam_role_policy_attachment" "mdw_eks_manager" {
+  role       = aws_iam_role.mdw_eks_manager.name
+  policy_arn = aws_iam_policy.mdw_eks_manager.arn
 }
 #
 # resource "aws_iam_user" "manager" {
@@ -84,6 +84,6 @@ resource "aws_iam_role_policy_attachment" "mdw_eks_admin" {
 # Best practice: use IAM roles due to temporary credentials
 resource "aws_eks_access_entry" "mdw_eks_admin" {
   cluster_name      = module.eks.cluster_name
-  principal_arn     = aws_iam_role.mdw_eks_admin.arn
+  principal_arn     = aws_iam_role.mdw_eks_manager.arn
   kubernetes_groups = ["mdw-admin"]
 }

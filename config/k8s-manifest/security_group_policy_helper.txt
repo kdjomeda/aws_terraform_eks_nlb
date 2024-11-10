@@ -15,7 +15,7 @@ EoF
 
 
 
-
+POD_SG_ID=$(aws ec2 describe-security-groups --filters Name=group-name,Values=gmfs-ire-prod-mdw-eks-act01-pod-secgroup --profile joseph --region eu-west-1 --query "SecurityGroups[*].GroupId" --output text)
 cat << EoF > mdw_securitygroup/pod-secgroup-policy.yaml
 apiVersion: vpcresources.k8s.aws/v1beta1
 kind: SecurityGroupPolicy

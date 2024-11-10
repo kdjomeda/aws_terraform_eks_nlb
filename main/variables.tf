@@ -180,3 +180,5 @@ variable "var_redis_engine_version" {}
 variable "var_redis_replica_nodes_number" {}
 variable "var_redis_nodes_number" {}
 variable "var_redis_port" {}
+
+variable "var_mdw_github_token" {}
