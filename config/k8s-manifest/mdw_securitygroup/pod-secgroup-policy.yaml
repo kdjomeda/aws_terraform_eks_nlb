@@ -9,4 +9,4 @@ spec:
       app: netshoot
   securityGroups:
     groupIds:
-      - sg-0321a330a181232e8
+      - sg-0c8507735acd6bc00
